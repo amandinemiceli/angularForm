@@ -1,0 +1,9 @@
+body {
+	width: 90%;
+    margin: 15px 60px;
+}
+
+#json {
+    font-size: 16px;
+    color: #1f2e84;
+}

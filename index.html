@@ -1,0 +1,149 @@
+
+<!doctype html>
+<html lang="en" ng-app="formApp">
+<head>
+	<title>InMind Form Creation</title>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="inMind Form Creation"/>
+	<meta name="author" content="Amandine Miceli">
+
+  <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
+  <link type="text/css" rel="stylesheet" href="css/jquery-ui.min.css">
+	<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="css/pages.css">
+  <link type="text/css" rel="stylesheet" href="css/app.css">
+
+
+  <script src="js/libs/jquery.min.js"></script>
+  <script src="js/libs/jquery-ui.min.js"></script>
+  <script src="js/libs/bootstrap.min.js"></script>
+  <script src="js/libs/angular.min.js"></script>
+  <script src="js/libs/sortable.min.js"></script>
+	<script src="js/app.js"></script>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+  <h2>Formulaire candidat</h2>
+  <div ng-controller="formCtrl">
+    
+    <hr>
+    <div>
+      <p id="json">{{form}}</p>
+    </div>
+    <hr>
+
+    <!-- form input to add a new question -->
+    <form class="m-t-10 m-b-10" ng-submit="addQuestion()">
+    </form>
+
+
+    <form class="form-horizontal m-t-20" role="form" ng-model="form">
+
+      <!-- Compulsory fields -->
+      <div class="">
+        <div class="form-group">
+          <div class="col-xs-10">
+            <input type="email" id="email" class="form-control" value="Adresse e-mail" disabled="">
+          </div>
+          <label for="email" class="col-xs-2 control-label">Champ obligatoire</label>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-10">
+            <input type="text" id="lastname" class="form-control" value="Nom" disabled="">
+          </div>
+          <label for="lastname" class="col-xs-2 control-label">Champ obligatoire</label>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-10">
+            <input type="text" id="firstname" class="form-control" value="Prénom" disabled="">
+          </div>
+          <label for="firstname" class="col-xs-2 control-label">Champ obligatoire</label>
+        </div>
+
+        <div class="form-group">
+          <div class="col-xs-10">
+            <input type="text" id="phone" class="form-control" value="Numéro de téléphone" disabled="">
+          </div>
+          <label for="phone" class="col-xs-2 control-label">Champ obligatoire</label>
+        </div>
+      </div>
+
+      <!-- Other questions -->
+      <div ng-repeat="question in form">
+
+        <!-- <div class="col-xs-10 bg-white" ng-show="add_question" ng-model="question"> -->
+
+          <!-- Question label -->
+          <div class="form-group m-b-20">
+            <label for="" class="col-xs-2 control-label">Libellé</label>
+            <div class="col-xs-10">
+              <input type="text" id="" class="form-control" ng-model="question.label" placeholder="Libellé de la question">
+            </div>
+          </div>
+
+          <!-- Question type -->
+          <div id="question_type" class="form-group m-t-10 required" ng-model="question.type">
+            <div class="radio radio-primary">
+              <input type="radio" name="question_type" id="text_type" value="text" ng-model="question_type" ng-checked="question.type == 'text'">
+              <label for="text_type">Texte</label>
+            </div>
+            <div class="radio radio-primary">
+              <input type="radio" name="question_type" id="integer_type" value="integer" ng-model="question_type" ng-checked="question.type == 'integer'">
+              <label for="integer_type">Numérique</label>
+            </div>
+            <div class="radio radio-primary">
+              <input type="radio" name="question_type" id="date_type" value="date" ng-model="question_type" ng-checked="question.type == 'date'">
+              <label for="date_type">Date</label>
+            </div>
+            <div class="radio radio-primary">
+              <input type="radio" name="question_type" id="list_type" value="list" ng-model="question_type" ng-checked="question.type == 'list'">
+              <label for="list_type">Liste de choix</label>
+            </div>
+          </div>
+
+          <!-- if list, checkbox type? -->
+          <div class="checkbox check-primary m-t-15" ng-show="question_type == 'list'">
+            <input type="checkbox" name="checkbox_type" id="checkbox_type" value="checkbox" ng-model="checkbox_type">
+            <label for="checkbox_type">Choix multiples ?</label>
+          </div>
+
+          <!-- if date, next montht type? -->
+          <div class="checkbox check-primary m-t-15" ng-show="question_type == 'date'">
+            <input type="checkbox" id="nextmonth_type">
+            <label for="nextmonth_type">N'afficher que les 12 prochains mois ?</label>
+          </div>
+
+          <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage" ng-model="conditions">
+
+          <!-- Available options -->
+          <div class="" ng-show="checkbox_type" ng-repeat="option in question.options">
+            <input class="" placeholder="Nom du champ" type="text" ng-model="option.label">
+            <span ng-click="deleteOption(question.id, option.id)"><i class="fa fa-trash"></i></span>
+          </div>
+
+        <!-- </div> -->
+
+        <span ng-click="deleteQuestion(question.id)"><i class="fa fa-trash"></i></span>
+
+
+        <div class="col-xs-2">
+        </div>
+
+      </div>
+
+    </form>
+
+    <input class="btn btn-primary btn-cons m-t-20" type="button" value="Ajouter une question" ng-click="add_question = true">
+
+  </div>
+</body>
+</html>
