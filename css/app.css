@@ -7,3 +7,12 @@ body {
     font-size: 16px;
     color: #1f2e84;
 }
+
+.trash-options {
+    text-align: left;
+    line-height: 40px;
+}
+
+.form-horizontal .form-group {
+    margin-left: 0px;
+}

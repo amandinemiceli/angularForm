@@ -12,15 +12,16 @@
   <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
   <link type="text/css" rel="stylesheet" href="css/jquery-ui.min.css">
 	<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="css/switchery.min.css">
   <link type="text/css" rel="stylesheet" href="css/pages.css">
   <link type="text/css" rel="stylesheet" href="css/app.css">
-
 
   <script src="js/libs/jquery.min.js"></script>
   <script src="js/libs/jquery-ui.min.js"></script>
   <script src="js/libs/bootstrap.min.js"></script>
   <script src="js/libs/angular.min.js"></script>
   <script src="js/libs/sortable.min.js"></script>
+  <script src="js/libs/switchery.min.js"></script>
 	<script src="js/app.js"></script>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -44,10 +45,10 @@
     </form>
 
 
-    <form class="form-horizontal m-t-20" role="form" ng-model="form">
+    <div class="form-horizontal m-t-20" ng-model="form">
 
       <!-- Compulsory fields -->
-      <div class="">
+      <div class="compulsory-fields col-xs-12">
         <div class="form-group">
           <div class="col-xs-10">
             <input type="email" id="email" class="form-control" value="Adresse e-mail" disabled="">
@@ -78,71 +79,99 @@
       </div>
 
       <!-- Other questions -->
-      <div ng-repeat="question in form">
-
-        <!-- <div class="col-xs-10 bg-white" ng-show="add_question" ng-model="question"> -->
+      <div id="{{ $index }}" class="col-xs-12 m-t-40 bg-white b-b b-t b-grey" ng-repeat="question in form">
 
           <!-- Question label -->
-          <div class="form-group m-b-20">
-            <label for="" class="col-xs-2 control-label">Libellé</label>
-            <div class="col-xs-10">
-              <input type="text" id="" class="form-control" ng-model="question.label" placeholder="Libellé de la question">
+          <div class="form-group col-xs-12 m-b-20">
+            <label for="question_{{ question.id }}_label" class="col-xs-1 control-label">Libellé</label>
+            <div class="col-xs-9">
+              <input type="text" id="question_{{ question.id }}_label" class="form-control" ng-model="question.label" placeholder="Libellé de la question">
+            </div>
+
+            <div class="col-xs-2">
+              <div class="checkbox check-primary">
+                <label for="question_{{ question.id }}_required">Champ obligatoire ?</label>
+                <input type="checkbox" id="question_{{ question.id }}_required" name="question_{{ question.id }}_required" ng-model="question.required">
+                {{ question.required }}
+              </div>
             </div>
           </div>
 
           <!-- Question type -->
-          <div id="question_type" class="form-group m-t-10 required" ng-model="question.type">
-            <div class="radio radio-primary">
-              <input type="radio" name="question_type" id="text_type" value="text" ng-model="question_type" ng-checked="question.type == 'text'">
-              <label for="text_type">Texte</label>
-            </div>
-            <div class="radio radio-primary">
-              <input type="radio" name="question_type" id="integer_type" value="integer" ng-model="question_type" ng-checked="question.type == 'integer'">
-              <label for="integer_type">Numérique</label>
-            </div>
-            <div class="radio radio-primary">
-              <input type="radio" name="question_type" id="date_type" value="date" ng-model="question_type" ng-checked="question.type == 'date'">
-              <label for="date_type">Date</label>
-            </div>
-            <div class="radio radio-primary">
-              <input type="radio" name="question_type" id="list_type" value="list" ng-model="question_type" ng-checked="question.type == 'list'">
-              <label for="list_type">Liste de choix</label>
-            </div>
+          <div class="form-group form-inline col-xs-12 m-t-10 required">
+            <fieldset id="question_{{ question.id }}_type">
+              <div class="radio radio-primary">
+                <input type="radio" name="question_{{ question.id }}_type" id="text_type_{{ question.id }}" ng-model="question.type" value="text">
+                <label for="text_type_{{ question.id }}">Texte</label>
+              </div>
+              <div class="radio radio-primary">
+                <input type="radio" name="question_{{ question.id }}_type" id="date_type_{{ question.id }}" ng-model="question.type" value="date">
+                <label for="date_type_{{ question.id }}">Date</label>
+              </div>
+              <div class="radio radio-primary">
+                <input type="radio" name="question_{{ question.id }}_type" id="list_type_{{ question.id }}" ng-model="question.type" value="list">
+                <label for="list_type_{{ question.id }}">Liste de choix</label>
+              </div>
+            </fieldset>
           </div>
 
-          <!-- if list, checkbox type? -->
-          <div class="checkbox check-primary m-t-15" ng-show="question_type == 'list'">
-            <input type="checkbox" name="checkbox_type" id="checkbox_type" value="checkbox" ng-model="checkbox_type">
-            <label for="checkbox_type">Choix multiples ?</label>
-          </div>
+          <div class="form-group">
+            <!-- if text, numeric type? -->
+            <div id="question_{{ question.id }}_numeric" class="checkbox check-primary" ng-if="question.type == 'text'">
+              <input type="checkbox" name="question_{{ question.id }}_numeric" id="numeric_type_{{ question.id }}" value="numeric" ng-model="question.numeric">
+              <label for="numeric_type_{{ question.id }}">Numérique</label>
+            </div>
 
-          <!-- if date, next montht type? -->
-          <div class="checkbox check-primary m-t-15" ng-show="question_type == 'date'">
-            <input type="checkbox" id="nextmonth_type">
-            <label for="nextmonth_type">N'afficher que les 12 prochains mois ?</label>
-          </div>
+            <!-- if list, checkbox type? -->
+            <div id="question_{{ question.id }}_checkbox" class="checkbox check-primary" ng-if="question.type == 'list'">
+              <input type="checkbox" name="question_{{ question.id }}_checkbox" id="checkbox_type_{{ question.id }}" value="checkbox" ng-model="question.checkbox">
+              <label for="checkbox_type_{{ question.id }}">Question à choix multiples ?</label>
+            </div>
 
-          <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage" ng-model="conditions">
+            <!-- if list, autocomplete type? -->
+            <div id="question_{{ question.id }}_autocomplete" class="checkbox check-primary" ng-if="question.type == 'list'">
+              <input type="checkbox" name="question_{{ question.id }}_autocomplete" id="autocomplete_type_{{ question.id }}" value="autocomplete" ng-model="question.autocomplete">
+              <label for="autocomplete_type_{{ question.id }}">Avec auto-complétion ?</label>
+            </div>
+
+            <!-- if date, next month type? -->
+            <div id="question_{{ question.id }}_nextmonth" class="checkbox check-primary" ng-if="question.type == 'date'">
+              <input type="checkbox" name="question_{{ question.id }}_nextmonth" id="nextmonth_type_{{ question.id }}" value="nextmonth" ng-model="question.nextmonth">
+              <label for="nextmonth_type_{{ question.id }}">N'afficher que les 12 prochains mois ?</label>
+            </div>
+
+            <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage pour la question" ng-model="conditions">
+          </div>
 
           <!-- Available options -->
-          <div class="" ng-show="checkbox_type" ng-repeat="option in question.options">
-            <input class="" placeholder="Nom du champ" type="text" ng-model="option.label">
-            <span ng-click="deleteOption(question.id, option.id)"><i class="fa fa-trash"></i></span>
+          <div class="form-group" ng-model="checkbox_type" ng-if="question.type == 'list'">
+            <h5>Valeurs possibles</h5>
+
+            <div class="" ng-repeat="option in question.options">
+              <div class="col-xs-11">
+                <input class="form-control m-t-5" placeholder="Nom du champ" type="text" ng-model="option.label">
+              </div>
+              <div class="col-xs-1">
+                <span ng-click="deleteOption(question.id, option.id)"><i class="fa fa-trash trash-options"></i></span>
+              </div>
+              <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage" ng-model="conditions">
+            </div>
+
+            <form class="" ng-submit="addOption(question.id)">
+              <div class="col-xs-11">
+                <input type="text" class="form-control m-t-5" ng-model="label" placeholder="Ajouter une option">
+              </div>
+            </form>
           </div>
 
-        <!-- </div> -->
-
-        <span ng-click="deleteQuestion(question.id)"><i class="fa fa-trash"></i></span>
-
-
-        <div class="col-xs-2">
-        </div>
 
       </div>
+    
+    </div>
 
-    </form>
-
-    <input class="btn btn-primary btn-cons m-t-20" type="button" value="Ajouter une question" ng-click="add_question = true">
+    <div class="">
+      <input class="btn btn-primary btn-cons m-t-40" type="button" value="Ajouter une question" ng-click="add_question = true">
+    </div>
 
   </div>
 </body>

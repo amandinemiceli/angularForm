@@ -4,14 +4,14 @@ var App = angular.module('formApp',['ui.sortable']);
 
 App.controller('formCtrl', function($scope) {
     $scope.form = [
-        {id:0, order:0, label:'Quelles sont vos prétentions salariales ?', type:'integer', required:true},
-        {id:1, order:1, label:'Dans quelles régions êtes-vous mobile ?', type:'list', required:true, options:[
+        {id:0, order:0, label:'Quelles sont vos prétentions salariales ?', type:'text', numeric: true, required:false},
+        {id:1, order:1, label:'Dans quelles régions êtes-vous mobile ?', type:'list', checkbox: true, autocomplete: true, required:true, options:[
             {id:0, order:0, label:"Ile de France", conditions:[]},
             {id:1, order:1, label:"Rhône-Alpes", conditions:[]},
         ]},
-        // {id:2, order:2, label:'Dans quel département êtes-vous mobile ?', type:'list', required:true, options:[]},
+        {id:2, order:2, label:'Dans quel département êtes-vous mobile ?', type:'list', checkbox: true, autocomplete: true, required:true, options:[]},
         // {id:3, order:3, label:'Quel est le secteur qui vous intéresse ?', type:'text', required:true, options:[]},
-        // {id:4, order:4, label:'Quand êtes-vous disponible ?', type:'date', required:true, options:[]}
+        {id:4, order:4, label:'Quand êtes-vous disponible ?', type:'date', nextmonth:true, required:true, options:[]}
     ];
 
     $scope.addQuestion = function() {
@@ -21,7 +21,6 @@ App.controller('formCtrl', function($scope) {
     };
 
     $scope.deleteQuestion = function(question_id) {
-        console.log(question_id);
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
                 var index = $scope.form.indexOf(question);
