@@ -11,7 +11,9 @@
 
   <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">
   <link type="text/css" rel="stylesheet" href="css/jquery-ui.min.css">
-	<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="bower_components/angular-ui-select/dist/select.min.css">
+	<link type="text/css" rel="stylesheet" href="bower_components/select2/select2.css">
   <link type="text/css" rel="stylesheet" href="css/switchery.min.css">
   <link type="text/css" rel="stylesheet" href="css/pages.css">
   <link type="text/css" rel="stylesheet" href="css/app.css">
@@ -19,10 +21,11 @@
   <script src="js/libs/jquery.min.js"></script>
   <script src="js/libs/jquery-ui.min.js"></script>
   <script src="js/libs/bootstrap.min.js"></script>
-  <script src="js/libs/angular.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-ui-select/dist/select.min.js"></script>
   <script src="js/libs/sortable.min.js"></script>
   <script src="js/libs/switchery.min.js"></script>
-	<script src="js/app.js"></script>
+  <script src="js/app.js"></script>
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -101,16 +104,16 @@
           <div class="form-group form-inline col-xs-12 m-t-10 required">
             <fieldset id="question_{{ question.id }}_type">
               <div class="radio radio-primary">
-                <input type="radio" name="question_{{ question.id }}_type" id="text_type_{{ question.id }}" ng-model="question.type" value="text">
-                <label for="text_type_{{ question.id }}">Texte</label>
+                <input type="radio" name="question_{{ question.id }}_type" id="text_type_question_{{ question.id }}" ng-model="question.type" ng-click="uncheckAllSubtypes($event, question.id)" value="text">
+                <label for="text_type_question_{{ question.id }}">Texte</label>
               </div>
               <div class="radio radio-primary">
-                <input type="radio" name="question_{{ question.id }}_type" id="date_type_{{ question.id }}" ng-model="question.type" value="date">
-                <label for="date_type_{{ question.id }}">Date</label>
+                <input type="radio" name="question_{{ question.id }}_type" id="date_type_question_{{ question.id }}" ng-model="question.type" ng-click="uncheckAllSubtypes($event, question.id)" value="date">
+                <label for="date_type_question_{{ question.id }}">Date</label>
               </div>
               <div class="radio radio-primary">
-                <input type="radio" name="question_{{ question.id }}_type" id="list_type_{{ question.id }}" ng-model="question.type" value="list">
-                <label for="list_type_{{ question.id }}">Liste de choix</label>
+                <input type="radio" name="question_{{ question.id }}_type" id="list_type_question_{{ question.id }}" ng-model="question.type" ng-click="uncheckAllSubtypes($event, question.id)" value="list">
+                <label for="list_type_question_{{ question.id }}">Liste de choix</label>
               </div>
             </fieldset>
           </div>
@@ -118,29 +121,46 @@
           <div class="form-group">
             <!-- if text, numeric type? -->
             <div id="question_{{ question.id }}_numeric" class="checkbox check-primary" ng-if="question.type == 'text'">
-              <input type="checkbox" name="question_{{ question.id }}_numeric" id="numeric_type_{{ question.id }}" value="numeric" ng-model="question.numeric">
-              <label for="numeric_type_{{ question.id }}">Numérique</label>
+              <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_numeric" id="numeric_type_question_{{ question.id }}" value="numeric" ng-model="question.numeric">
+              <label for="numeric_type_question_{{ question.id }}">Numérique</label>
             </div>
 
             <!-- if list, checkbox type? -->
             <div id="question_{{ question.id }}_checkbox" class="checkbox check-primary" ng-if="question.type == 'list'">
-              <input type="checkbox" name="question_{{ question.id }}_checkbox" id="checkbox_type_{{ question.id }}" value="checkbox" ng-model="question.checkbox">
-              <label for="checkbox_type_{{ question.id }}">Question à choix multiples ?</label>
+              <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_checkbox" id="checkbox_type_question_{{ question.id }}" value="checkbox" ng-model="question.checkbox">
+              <label for="checkbox_type_question_{{ question.id }}">Question à choix multiples ?</label>
             </div>
 
             <!-- if list, autocomplete type? -->
             <div id="question_{{ question.id }}_autocomplete" class="checkbox check-primary" ng-if="question.type == 'list'">
-              <input type="checkbox" name="question_{{ question.id }}_autocomplete" id="autocomplete_type_{{ question.id }}" value="autocomplete" ng-model="question.autocomplete">
-              <label for="autocomplete_type_{{ question.id }}">Avec auto-complétion ?</label>
+              <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_autocomplete" id="autocomplete_type_question_{{ question.id }}" value="autocomplete" ng-model="question.autocomplete">
+              <label for="autocomplete_type_question_{{ question.id }}">Avec auto-complétion ?</label>
             </div>
 
             <!-- if date, next month type? -->
             <div id="question_{{ question.id }}_nextmonth" class="checkbox check-primary" ng-if="question.type == 'date'">
-              <input type="checkbox" name="question_{{ question.id }}_nextmonth" id="nextmonth_type_{{ question.id }}" value="nextmonth" ng-model="question.nextmonth">
-              <label for="nextmonth_type_{{ question.id }}">N'afficher que les 12 prochains mois ?</label>
+              <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_nextmonth" id="nextmonth_type_question_{{ question.id }}" value="nextmonth" ng-model="question.nextmonth">
+              <label for="nextmonth_type_question_{{ question.id }}">N'afficher que les 12 prochains mois ?</label>
+            </div>
+          </div>
+
+          <!-- Question conditions -->
+          <div class="col-xs-12" ng-repeat="condition in question.conditions">
+            <div class="form-group required">
+              <label for="question_{{ question.id }}_condition_{{ $index }}">Uniquement si la réponse à la question :</label>
+              <select id="question_{{ question.id }}_condition_{{ $index }}" name="question_{{ question.id }}_condition_{{ $index }}" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="condition">
+              </select>
             </div>
 
-            <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage pour la question" ng-model="conditions">
+            <div class="form-group required">
+              <label for="question_{{ question.id }}_condition_{{ $index }}_answers">Se trouve parmi ces valeurs</label>
+              <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="" ng-model="question.options">
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <input class="btn btn-primary btn-cons" type="button" value="Ajouter une condition d'affichage pour la question" ng-click="addCondition(question.id)">
           </div>
 
           <!-- Available options -->
