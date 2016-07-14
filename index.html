@@ -44,8 +44,8 @@
     <hr>
 
     <!-- form input to add a new question -->
-    <form class="m-t-10 m-b-10" ng-submit="addQuestion()">
-    </form>
+<!--     <form class="m-t-10 m-b-10" ng-submit="addQuestion()">
+    </form> -->
 
 
     <div class="form-horizontal m-t-20" ng-model="form">
@@ -145,22 +145,32 @@
           </div>
 
           <!-- Question conditions -->
-          <div class="col-xs-12" ng-repeat="condition in question.conditions">
-            <div class="form-group required">
-              <label for="question_{{ question.id }}_condition_{{ $index }}">Uniquement si la réponse à la question :</label>
-              <select id="question_{{ question.id }}_condition_{{ $index }}" name="question_{{ question.id }}_condition_{{ $index }}" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="condition">
-              </select>
-            </div>
+          <div class="form-group col-xs-12" id="question_{{ question.id }}_condition_{{ $index }}" ng-repeat="condition in question.conditions">
 
-            <div class="form-group required">
-              <label for="question_{{ question.id }}_condition_{{ $index }}_answers">Se trouve parmi ces valeurs</label>
-              <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="" ng-model="condition.answers">
-              </select>
-            </div>
+              <div class="col-xs-11">
+                <div class="form-group required">
+                  <label for="question_{{ question.id }}_condition_{{ $index }}_question">Uniquement si la réponse à la question :</label>
+                  <select id="question_{{ question.id }}_condition_{{ $index }}_question" name="question_{{ question.id }}_condition_{{ $index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="condition" ng-change="updateQuestionCondition(question.id, $index, condition)">
+                  </select>
+                </div>
+
+                <div class="form-group required">
+                  <label for="question_{{ question.id }}_condition_{{ $index }}_answers">Se trouve parmi ces valeurs</label>
+                  <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="!condition" ng-model="condition.answers" ng-change="updateQuestionConditionAnswers(question.id, $index, condition.answers)">
+                  </select>
+                </div>
+
+              </div>
+
+              <div class="col-xs-1 m-t-90 text-center">
+                <span ng-click="deleteQuestionCondition(question.id, $index)"><i class="fa fa-trash fa-2x trash-options"></i></span>
+              </div>
+
           </div>
 
+          <!-- Add a new question condition -->
           <div class="form-group">
-            <input class="btn btn-primary btn-cons" type="button" value="Ajouter une condition d'affichage pour la question" ng-click="addCondition(question.id)">
+            <input class="btn btn-primary btn-cons" type="button" value="Ajouter une condition d'affichage pour la question" name="" ng-click="addQuestionCondition(question.id)">
           </div>
 
           <!-- Available options -->
@@ -190,7 +200,7 @@
     </div>
 
     <div class="">
-      <input class="btn btn-primary btn-cons m-t-40" type="button" value="Ajouter une question" ng-click="add_question = true">
+      <input class="btn btn-primary btn-cons m-t-40" type="button" value="Ajouter une question" ng-click="addQuestion()">
     </div>
 
   </div>
