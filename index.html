@@ -154,7 +154,7 @@
 
             <div class="form-group required">
               <label for="question_{{ question.id }}_condition_{{ $index }}_answers">Se trouve parmi ces valeurs</label>
-              <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="" ng-model="question.options">
+              <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="" ng-model="condition.answers">
               </select>
             </div>
           </div>
