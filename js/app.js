@@ -130,7 +130,12 @@ App.controller('formCtrl', function($scope) {
     }
 
     $scope.deleteQuestionCondition = function(question_id, condition_index) {
-        console.log(condition_index);
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var index = $scope.form.indexOf(question);
+                $scope.form[question_id].conditions.splice(condition_index, 1);
+            }
+        });
     }
 
     $scope.addOption = function(question_id) {

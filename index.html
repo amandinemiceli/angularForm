@@ -118,7 +118,7 @@
             </fieldset>
           </div>
 
-          <div class="form-group">
+          <div class="form-group" ng-show="question.type">
             <!-- if text, numeric type? -->
             <div id="question_{{ question.id }}_numeric" class="checkbox check-primary" ng-if="question.type == 'text'">
               <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_numeric" id="numeric_type_question_{{ question.id }}" value="numeric" ng-model="question.numeric">
@@ -199,6 +199,7 @@
     
     </div>
 
+    <!-- Add a new question -->
     <div class="">
       <input class="btn btn-primary btn-cons m-t-40" type="button" value="Ajouter une question" ng-click="addQuestion()">
     </div>
