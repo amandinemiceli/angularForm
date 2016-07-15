@@ -48,7 +48,7 @@
     </form> -->
 
 
-    <div class="form-horizontal m-t-20" ng-model="form">
+    <div id="applicants-form" class="form-horizontal m-t-20" ng-model="form">
 
       <!-- Compulsory fields -->
       <div class="compulsory-fields col-xs-12">
@@ -82,7 +82,7 @@
       </div>
 
       <!-- Other questions -->
-      <div id="{{ $index }}" class="col-xs-12 m-t-40 bg-white b-b b-t b-grey" ng-repeat="question in form">
+      <div id="question_{{ question_index }}" class="col-xs-12 m-t-40 bg-white b-b b-t b-grey" ng-repeat="(question_index, question) in form">
 
           <!-- Question label -->
           <div class="form-group col-xs-12 m-b-20">
@@ -118,7 +118,8 @@
             </fieldset>
           </div>
 
-          <div class="form-group" ng-show="question.type">
+          <!-- Question subtype -->
+          <div class="form-group question-subtypes" ng-show="question.type">
             <!-- if text, numeric type? -->
             <div id="question_{{ question.id }}_numeric" class="checkbox check-primary" ng-if="question.type == 'text'">
               <input type="checkbox" class="question_{{ question.id }}_subtype" name="question_{{ question.id }}_numeric" id="numeric_type_question_{{ question.id }}" value="numeric" ng-model="question.numeric">
@@ -145,55 +146,85 @@
           </div>
 
           <!-- Question conditions -->
-          <div class="form-group col-xs-12" id="question_{{ question.id }}_condition_{{ $index }}" ng-repeat="condition in question.conditions">
+          <div class="form-group col-xs-12 p-l-50" id="question_{{ question.id }}_condition_{{ condition_index }}" ng-repeat="(condition_index, condition) in question.conditions">
 
               <div class="col-xs-11">
                 <div class="form-group required">
-                  <label for="question_{{ question.id }}_condition_{{ $index }}_question">Uniquement si la réponse à la question :</label>
-                  <select id="question_{{ question.id }}_condition_{{ $index }}_question" name="question_{{ question.id }}_condition_{{ $index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="condition" ng-change="updateQuestionCondition(question.id, $index, condition)">
+                  <label for="question_{{ question.id }}_condition_{{ condition_index }}_question">Affichage de la question uniquement si la/les réponse(s) à la question :</label>
+                  <select id="question_{{ question.id }}_condition_{{ condition_index }}_question" name="question_{{ question.id }}_condition_{{ condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="condition" ng-change="updateQuestionCondition(question.id, condition_index, condition)">
                   </select>
                 </div>
 
                 <div class="form-group required">
-                  <label for="question_{{ question.id }}_condition_{{ $index }}_answers">Se trouve parmi ces valeurs</label>
-                  <select id="question_{{ question.id }}_condition_{{ $index }}_answers" name="question_{{ question.id }}_condition_{{ $index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="!condition" ng-model="condition.answers" ng-change="updateQuestionConditionAnswers(question.id, $index, condition.answers)">
+                  <label for="question_{{ question.id }}_condition_{{ condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
+                  <select id="question_{{ question.id }}_condition_{{ condition_index }}_answers" name="question_{{ question.id }}_condition_{{ condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[condition.id].options track by option.id" ng-disabled="!condition" ng-model="condition.answers" ng-change="updateQuestionConditionAnswers(question.id, condition_index, condition.answers)">
                   </select>
                 </div>
 
               </div>
 
+              <!-- Delete the current question condition -->
               <div class="col-xs-1 m-t-90 text-center">
-                <span ng-click="deleteQuestionCondition(question.id, $index)"><i class="fa fa-trash fa-2x trash-options"></i></span>
+                <span ng-click="deleteQuestionCondition(question.id, condition_index)"><i class="fa fa-trash fa-2x trash-options" title="Supprimer cette condition"></i></span>
               </div>
 
           </div>
 
           <!-- Add a new question condition -->
           <div class="form-group">
-            <input class="btn btn-primary btn-cons" type="button" value="Ajouter une condition d'affichage pour la question" name="" ng-click="addQuestionCondition(question.id)">
+            <input class="btn btn-primary btn-cons m-l-20" type="button" value="Ajouter une condition d'affichage pour la question" name="" ng-click="addQuestionCondition(question.id)">
           </div>
 
           <!-- Available options -->
-          <div class="form-group" ng-model="checkbox_type" ng-if="question.type == 'list'">
-            <h5>Valeurs possibles</h5>
+          <div class="form-group col-xs-12" ng-model="question.type" ng-if="question.type == 'list'">
+            <h4>Valeurs possibles</h4>
 
-            <div class="" ng-repeat="option in question.options">
+            <div class="" ng-repeat="(option_index, option) in question.options">
               <div class="col-xs-11">
-                <input class="form-control m-t-5" placeholder="Nom du champ" type="text" ng-model="option.label">
+                <input type="text" class="form-control m-t-5" placeholder="Nom du champ" ng-model="option.label">
               </div>
               <div class="col-xs-1">
-                <span ng-click="deleteOption(question.id, option.id)"><i class="fa fa-trash trash-options"></i></span>
+                <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-trash trash-options" title="Supprimer cette option"></i></span>
               </div>
-              <input class="btn btn-primary btn-cons m-t-10" type="button" value="Ajouter une condition d'affichage" ng-model="conditions">
+
+              <!-- Option conditions -->
+              <div class="form-group col-xs-12" id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}" ng-repeat="(option_condition_index, option_condition) in option.conditions">
+
+                <div class="col-xs-11">
+                  <div class="form-group required">
+                    <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question">Affichage de la réponse uniquement si la/les réponse(s) à la question :</label>
+                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition)">
+                    </select>
+                  </div>
+
+                  <div class="form-group required">
+                    <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
+                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[option_condition.id].options track by option.id" ng-disabled="" ng-model="option_condition.answers" ng-change="updateOptionConditionAnswers(question.id, option_index, option_condition.answers)">
+                    </select>
+                  </div>
+
+                </div>
+
+                <!-- Delete the current option condition -->
+                <div class="col-xs-1 m-t-90 text-center">
+                  <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-trash fa-2x trash-options" title="Supprimer cette condition"></i></span>
+                </div>
+
+              </div>
+
+              <!-- Add a new option condition -->
+              <div class="form-group col-xs-12">
+                <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajouter une condition d'affichage" ng-model="conditions">
+              </div>
             </div>
 
-            <form class="" ng-submit="addOption(question.id)">
+            <!-- Add a new option -->
+            <form class="" ng-submit="addOption(question.id, option)">
               <div class="col-xs-11">
-                <input type="text" class="form-control m-t-5" ng-model="label" placeholder="Ajouter une option">
+                <input type="text" class="form-control m-t-5" ng-model="option.label" placeholder="Ajouter une option">
               </div>
             </form>
           </div>
-
 
       </div>
     

@@ -100,6 +100,9 @@ App.controller('formCtrl', function($scope) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
                 var question_index = $scope.form.indexOf(question);
+                if (!$scope.form[question_index].conditions) {
+                    $scope.form[question_index].conditions = [];
+                }
                 $scope.form[question_index].conditions.push({
                     id: '',
                     label: '',
@@ -138,34 +141,45 @@ App.controller('formCtrl', function($scope) {
         });
     }
 
-    $scope.addOption = function(question_id) {
+
+    $scope.deleteOptionCondition = function(question_id, option_index, option_condition_index) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var index = $scope.form.indexOf(question);
+                $scope.form[question_id].options[option_index].conditions.splice(option_condition_index, 1);
+            }
+        });
+    }
+
+    $scope.addOption = function(question_id, option) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
                 var question_index = $scope.form.indexOf(question);
-                var new_option_id  = $scope.form[question_index].options.length;
+                var option_index   = $scope.form[question_index].options.length;
                 $scope.form[question_index].options.push({
-                    id: new_option_id, 
-                    order: new_option_id, 
-                    label: this.label, 
-                    conditions:[]
+                    id: option_index, 
+                    order: option_index, 
+                    label: option.label, 
+                    conditions: []
                 });
-                this.label = '';
+                option.label = '';
             }
         });
     };
 
-    $scope.deleteOption = function(question_id, option_id) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var question_index = $scope.form.indexOf(question);
-                angular.forEach($scope.form[question_index].options, function(option) {
-                    if (option.id == option_id) {
-                        var index = $scope.form[question_index].options.indexOf(option);
-                        $scope.form[question_index].options.splice(index, 1);
-                    }
-                });
-            }
-        });
+    $scope.deleteOption = function(question_id, option_index) {
+        console.log(option_index);
+        // angular.forEach($scope.form, function(question) {
+        //     if (question.id == question_id) {
+        //         var question_index = $scope.form.indexOf(question);
+        //         angular.forEach($scope.form[question_index].options, function(option) {
+        //             if (option.id == option_id) {
+        //                 var index = $scope.form[question_index].options.indexOf(option);
+        //                 $scope.form[question_index].options.splice(index, 1);
+        //             }
+        //         });
+        //     }
+        // });
     };
 
     $scope.uncheckAllSubtypes = function($event, question_id) {

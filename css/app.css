@@ -8,11 +8,16 @@ body {
     color: #1f2e84;
 }
 
-.trash-options {
+#applicants-form .trash-options {
     text-align: left;
     line-height: 40px;
 }
 
-.form-horizontal .form-group {
+#applicants-form .form-horizontal .form-group {
     margin-left: 0px;
 }
+
+#applicants-form .question-subtypes {
+    padding-left: 20px !important;
+}
+
