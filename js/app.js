@@ -74,6 +74,10 @@ App.controller('formCtrl', function($scope) {
         // {id:4, order:4, label:'Quand êtes-vous disponible ?', type:'date', nextmonth:true, required:true, options:[]}
     ];
 
+
+    ////////////////////
+    // Add a question //
+    ////////////////////
     $scope.addQuestion = function() {
         var id = $scope.form.length;
         $scope.form.push({
@@ -87,6 +91,9 @@ App.controller('formCtrl', function($scope) {
         $scope.label = '';
     };
 
+    ///////////////////////
+    // Delete a question //
+    ///////////////////////
     $scope.deleteQuestion = function(question_id) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
@@ -96,92 +103,9 @@ App.controller('formCtrl', function($scope) {
         });
     };
 
-    $scope.addQuestionCondition = function(question_id) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var question_index = $scope.form.indexOf(question);
-                if (!$scope.form[question_index].conditions) {
-                    $scope.form[question_index].conditions = [];
-                }
-                $scope.form[question_index].conditions.push({
-                    id: '',
-                    label: '',
-                    answers: []
-                });
-            }
-        });
-    };
-
-    $scope.updateQuestionCondition = function(question_id, condition_index, condition) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var question_index = $scope.form.indexOf(question);
-                $scope.form[question_index].conditions[condition_index].id      = condition.id;
-                $scope.form[question_index].conditions[condition_index].label   = condition.label;
-                $scope.form[question_index].conditions[condition_index].answers = [];
-            }
-        });
-    }
-
-    $scope.updateQuestionConditionAnswers = function(question_id, condition_index, answers) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var question_index = $scope.form.indexOf(question);
-                $scope.form[question_index].conditions[condition_index].answers = answers;
-            }
-        });
-    }
-
-    $scope.deleteQuestionCondition = function(question_id, condition_index) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var index = $scope.form.indexOf(question);
-                $scope.form[question_id].conditions.splice(condition_index, 1);
-            }
-        });
-    }
-
-
-    $scope.deleteOptionCondition = function(question_id, option_index, option_condition_index) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var index = $scope.form.indexOf(question);
-                $scope.form[question_id].options[option_index].conditions.splice(option_condition_index, 1);
-            }
-        });
-    }
-
-    $scope.addOption = function(question_id, option) {
-        angular.forEach($scope.form, function(question) {
-            if (question.id == question_id) {
-                var question_index = $scope.form.indexOf(question);
-                var option_index   = $scope.form[question_index].options.length;
-                $scope.form[question_index].options.push({
-                    id: option_index, 
-                    order: option_index, 
-                    label: option.label, 
-                    conditions: []
-                });
-                option.label = '';
-            }
-        });
-    };
-
-    $scope.deleteOption = function(question_id, option_index) {
-        console.log(option_index);
-        // angular.forEach($scope.form, function(question) {
-        //     if (question.id == question_id) {
-        //         var question_index = $scope.form.indexOf(question);
-        //         angular.forEach($scope.form[question_index].options, function(option) {
-        //             if (option.id == option_id) {
-        //                 var index = $scope.form[question_index].options.indexOf(option);
-        //                 $scope.form[question_index].options.splice(index, 1);
-        //             }
-        //         });
-        //     }
-        // });
-    };
-
+    ///////////////////////////////
+    // Update the question type  //
+    ///////////////////////////////
     $scope.uncheckAllSubtypes = function($event, question_id) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
@@ -224,5 +148,139 @@ App.controller('formCtrl', function($scope) {
             }
         });
     }
+
+    //////////////////////////////
+    // Add a question condition //
+    //////////////////////////////
+    $scope.addQuestionCondition = function(question_id) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                if (!$scope.form[question_index].conditions) {
+                    $scope.form[question_index].conditions = [];
+                }
+                $scope.form[question_index].conditions.push({
+                    id: '',
+                    label: '',
+                    answers: []
+                });
+            }
+        });
+    };
+
+    /////////////////////////////////
+    // Delete a question condition //
+    /////////////////////////////////
+    $scope.deleteQuestionCondition = function(question_id, condition_index) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var index = $scope.form.indexOf(question);
+                $scope.form[question_id].conditions.splice(condition_index, 1);
+            }
+        });
+    }
+    
+    //////////////////////////////////////////
+    // Update a question condition question //
+    //////////////////////////////////////////
+    $scope.updateQuestionCondition = function(question_id, condition_index, condition) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].conditions[condition_index].id      = condition.id;
+                $scope.form[question_index].conditions[condition_index].label   = condition.label;
+                $scope.form[question_index].conditions[condition_index].answers = [];
+            }
+        });
+    }
+
+    ////////////////////////////////////////
+    // Update question conditions answers //
+    ////////////////////////////////////////
+    $scope.updateQuestionConditionAnswers = function(question_id, condition_index, answers) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].conditions[condition_index].answers = answers;
+            }
+        });
+    }
+
+    ///////////////////
+    // Add an option //
+    ///////////////////
+    $scope.addOption = function(question_id, option) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                var option_index   = $scope.form[question_index].options.length;
+                $scope.form[question_index].options.push({
+                    id: option_index, 
+                    order: option_index, 
+                    label: option.label, 
+                    conditions: []
+                });
+                option.label = '';
+            }
+        });
+    };
+
+    //////////////////////
+    // Delete an option //
+    //////////////////////
+    $scope.deleteOption = function(question_id, option_index) {
+        console.log(option_index);
+        // angular.forEach($scope.form, function(question) {
+        //     if (question.id == question_id) {
+        //         var question_index = $scope.form.indexOf(question);
+        //         angular.forEach($scope.form[question_index].options, function(option) {
+        //             if (option.id == option_id) {
+        //                 var index = $scope.form[question_index].options.indexOf(option);
+        //                 $scope.form[question_index].options.splice(index, 1);
+        //             }
+        //         });
+        //     }
+        // });
+    };
+
+    //////////////////////////////
+    // Add an option condition  //
+    //////////////////////////////
+    $scope.addOptionCondition = function(question_id, option_index) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                if (!$scope.form[question_index].options[option_index].conditions) {
+                    $scope.form[question_index].options[option_index].conditions = [];
+                }
+                $scope.form[question_index].options[option_index].conditions.push({
+                    id: '',
+                    label: '',
+                });
+            }
+        });
+    };
+
+    ////////////////////////////////
+    // Delete an option condition //
+    ////////////////////////////////
+    $scope.deleteOptionCondition = function(question_id, option_index, option_condition_index) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var index = $scope.form.indexOf(question);
+                $scope.form[question_id].options[option_index].conditions.splice(option_condition_index, 1);
+            }
+        });
+    }
+
+    /////////////////////////////////////////
+    // Update an option condition question //
+    /////////////////////////////////////////
+
+    /////////////////////////////////////
+    // Update option condition answers //
+    /////////////////////////////////////
+
+
 
 });
