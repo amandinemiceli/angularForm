@@ -187,20 +187,38 @@ App.controller('formCtrl', function($scope) {
             if (question.id == question_id) {
                 var question_index = $scope.form.indexOf(question);
                 var currentType = $event.currentTarget.value;
+                
                 if (currentType == 'text') {
+                    // remove other types attributes from the question object
                     delete $scope.form[question_index].nextmonth;
                     delete $scope.form[question_index].autocomplete;
                     delete $scope.form[question_index].checkbox;
+
+                    // remove options
+                    delete $scope.form[question_index].options;
+                    
+                    // add autocomplete and checkbox attributes with default value to false
                     $scope.form[question_index].autocomplete = false;
-                    $scope.form[question_index].checkbox = false;
+                    $scope.form[question_index].checkbox     = false;
+
                 } else if (currentType == 'date') {
+                    // remove other types attributes from the question object
                     delete $scope.form[question_index].numeric;
                     delete $scope.form[question_index].autocomplete;
                     delete $scope.form[question_index].checkbox;
+
+                    // remove options
+                    delete $scope.form[question_index].options;
+
+                    // add nextmonth attribute with default value to false
                     $scope.form[question_index].nextmonth = false;
+
                 } else {
+                    // remove other types attributes from the question object
                     delete $scope.form[question_index].nextmonth;
                     delete $scope.form[question_index].numeric;
+
+                    // add empty array of options
                     $scope.form[question_index].options = [];
                 }
             }
