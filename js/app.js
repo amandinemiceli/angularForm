@@ -197,11 +197,18 @@ App.controller('formCtrl', function($scope) {
     ////////////////////////////////////////
     // Update question conditions answers //
     ////////////////////////////////////////
-    $scope.updateQuestionConditionAnswers = function(question_id, condition_index, answers) {
+    $scope.updateQuestionConditionAnswers = function(question_id, condition_index, condition_answers) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
                 var question_index = $scope.form.indexOf(question);
-                $scope.form[question_index].conditions[condition_index].answers = answers;
+
+                // remove attributes from the object we don't need
+                angular.forEach(condition_answers, function(condition_answer) {
+                    delete condition_answer.order;
+                    delete condition_answer.conditions;
+                });
+                
+                $scope.form[question_index].conditions[condition_index].answers = condition_answers;
             }
         });
     }
@@ -270,11 +277,35 @@ App.controller('formCtrl', function($scope) {
     /////////////////////////////////////////
     // Update an option condition question //
     /////////////////////////////////////////
+    $scope.updateOptionCondition = function(question_id, option_index, option_condition_index, option_condition) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].options[option_index].conditions[option_condition_index].id    = option_condition.id;
+                $scope.form[question_index].options[option_index].conditions[option_condition_index].label = option_condition.label;
+                $scope.form[question_index].options[option_index].conditions[option_condition_index].answers = [];
+            }
+        });
+    }
 
     /////////////////////////////////////
     // Update option condition answers //
     /////////////////////////////////////
+    $scope.updateOptionConditionAnswers = function(question_id, option_index, option_condition_index, option_condition_answers) {
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                
+                // remove attributes from the object we don't need
+                angular.forEach(option_condition_answers, function(option_condition_answer) {
+                    delete option_condition_answer.order;
+                    delete option_condition_answer.conditions;
+                });
 
+                $scope.form[question_index].options[option_index].conditions[option_condition_index].answers = option_condition_answers;
+            }
+        });
+    }
 
 
 });

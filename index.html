@@ -193,13 +193,13 @@
                 <div class="col-xs-11 m-t-10">
                   <div class="form-group required">
                     <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question">Affichage de la réponse uniquement si la/les réponse(s) à la question :</label>
-                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition)">
+                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label for question in form track by question.id" ng-disabled="" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition_index, option_condition)">
                     </select>
                   </div>
 
                   <div class="form-group required">
                     <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
-                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[option_condition.id].options track by option.id" ng-disabled="" ng-model="option_condition.answers" ng-change="updateOptionConditionAnswers(question.id, option_index, option_condition.answers)">
+                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[option_condition.id].options track by option.id" ng-disabled="" ng-model="option_condition.answers" ng-change="updateOptionConditionAnswers(question.id, option_index, option_condition_index, option_condition.answers)">
                     </select>
                   </div>
 
