@@ -4,26 +4,26 @@ var App = angular.module('formApp',['ui.sortable']);
 
 App.controller('formCtrl', function($scope) {
     $scope.form = [
-        {id:0, order:0, label:'Quelles sont vos prétentions salariales ?', type:'text', numeric: true, required:false},
+        {id: 56, order: 56, label:'Quelles sont vos prétentions salariales ?', type:'text', numeric: true, required:false},
 
         {
-            id:1, 
-            order:1, 
+            id: 25, 
+            order: 25, 
             label:'Dans quelles régions êtes-vous mobile ?', 
             type:'list', 
             checkbox: true, 
             autocomplete: true, 
             required:true,
             options:[
-                {id:0, order:0, label:"Ile-de-France", conditions:[]},
-                {id:1, order:1, label:"Nord-Pas-de-Calais", conditions:[]},
-                {id:2, order:2, label:"Rhône-Alpes", conditions:[]},
+                {id: 6, order: 6, label:"Ile-de-France", conditions:[]},
+                {id: 9, order: 9, label:"Nord-Pas-de-Calais", conditions:[]},
+                {id: 43, order: 43, label:"Rhône-Alpes", conditions:[]},
             ]
         },
 
         {
-            id:2, 
-            order:2, 
+            id: 12, 
+            order: 12, 
             label:'Dans quel département êtes-vous mobile ?', 
             type:'list', 
             checkbox: true, 
@@ -31,39 +31,39 @@ App.controller('formCtrl', function($scope) {
             required:true, 
             conditions: [
                 {
-                    id: 1,
+                    id: 25,
                     label: 'Dans quelles régions êtes-vous mobile ?',
                     answers:[
-                        {id: 0, label:"Ile-de-France"},
-                        {id: 1, label:"Nord-Pas-de-Calais"}
+                        {id: 6, label:"Ile-de-France"},
+                        {id: 9, label:"Nord-Pas-de-Calais"}
                     ]
                 },
             ], 
             options:[
                 {
-                    id:0, 
-                    order:0, 
+                    id: 3, 
+                    order: 3, 
                     label:"Nord", 
                     conditions:[
                         {
-                            id: 1,
+                            id: 25,
                             label: 'Dans quelles régions êtes-vous mobile ?',
                             answers:[
-                                {id: 1, label:"Nord-Pas-de-Calais"}
+                                {id: 9, label:"Nord-Pas-de-Calais"}
                             ]
                         }
                     ]
                 },
                 {
-                    id:1, 
-                    order:1, 
+                    id: 5, 
+                    order: 5, 
                     label:"Pas-de-Calais", 
                     conditions:[
                         {
-                            id: 1,
+                            id: 25,
                             label: 'Dans quelles régions êtes-vous mobile ?',
                             answers:[
-                                {id: 1, label:"Nord-Pas-de-Calais"}
+                                {id: 9, label:"Nord-Pas-de-Calais"}
                             ]
                         }
                     ]
@@ -197,8 +197,8 @@ App.controller('formCtrl', function($scope) {
     $scope.deleteQuestionCondition = function(question_id, condition_index) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
-                var index = $scope.form.indexOf(question);
-                $scope.form[question_id].conditions.splice(condition_index, 1);
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].conditions.splice(condition_index, 1);
             }
         });
     }
@@ -291,8 +291,8 @@ App.controller('formCtrl', function($scope) {
     $scope.deleteOptionCondition = function(question_id, option_index, option_condition_index) {
         angular.forEach($scope.form, function(question) {
             if (question.id == question_id) {
-                var index = $scope.form.indexOf(question);
-                $scope.form[question_id].options[option_index].conditions.splice(option_condition_index, 1);
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].options[option_index].conditions.splice(option_condition_index, 1);
             }
         });
     }
