@@ -74,6 +74,16 @@ App.controller('formCtrl', function($scope) {
         // {id:4, order:4, label:'Quand êtes-vous disponible ?', type:'date', nextmonth:true, required:true, options:[]}
     ];
 
+    ///////////////////////////////////
+    // Get index by object attribute //
+    ///////////////////////////////////
+    $scope.findByAttr = function(array, attr, value) {
+        for (var i = 0; i < array.length; i += 1) {
+            if (array[i][attr] === value) {
+                return i;
+            }
+        }
+    }
 
     ////////////////////
     // Add a question //
