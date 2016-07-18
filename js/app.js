@@ -229,18 +229,12 @@ App.controller('formCtrl', function($scope) {
     // Delete an option //
     //////////////////////
     $scope.deleteOption = function(question_id, option_index) {
-        console.log(option_index);
-        // angular.forEach($scope.form, function(question) {
-        //     if (question.id == question_id) {
-        //         var question_index = $scope.form.indexOf(question);
-        //         angular.forEach($scope.form[question_index].options, function(option) {
-        //             if (option.id == option_id) {
-        //                 var index = $scope.form[question_index].options.indexOf(option);
-        //                 $scope.form[question_index].options.splice(index, 1);
-        //             }
-        //         });
-        //     }
-        // });
+        angular.forEach($scope.form, function(question) {
+            if (question.id == question_id) {
+                var question_index = $scope.form.indexOf(question);
+                $scope.form[question_index].options.splice(option_index, 1);
+            }
+        });
     };
 
     //////////////////////////////
