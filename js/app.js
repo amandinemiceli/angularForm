@@ -85,6 +85,19 @@ App.controller('formCtrl', function($scope) {
         }
     }
 
+    ///////////////////////////////////////////////
+    // Only keep list type questions for selects //
+    ///////////////////////////////////////////////
+    $scope.onlyListQuestions = function() {
+        var formSelect = [];
+        angular.forEach($scope.form, function(question) {
+            if (question.type == 'list') {
+                formSelect.push(question);
+            }
+        });
+        return formSelect;
+    }
+
     ////////////////////
     // Add a question //
     ////////////////////
