@@ -160,7 +160,6 @@
                 <label for="question_{{ question.id }}_condition_{{ condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
                 <select id="question_{{ question.id }}_condition_{{ condition_index }}_answers" name="question_{{ question.id }}_condition_{{ condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[findByAttr(form, 'id', condition.id)].options track by option.id" ng-model="condition.answers" ng-change="updateQuestionConditionAnswers(question.id, condition_index, condition.answers)">
                 </select>
-
               </div>
 
             </div>
@@ -181,6 +180,10 @@
           <div class="form-group col-xs-12" ng-model="question.type" ng-if="question.type == 'list'">
             <h4>Valeurs possibles</h4>
 
+            <h6>Ajout groupé des options</h6>
+<!-- ng-model="question.options" rows="5" ng-list="&#10;" ng-trim="false"  -->
+            <textarea rows="15" ng-model="question.options" ng-init="question.options = optionLabels(question.id)" grouped-options></textarea>
+{{ optionLabels(question.id) }}
             <div class="form-group" ng-repeat="(option_index, option) in question.options">
               <!-- Option label -->
               <div class="col-xs-11">

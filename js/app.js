@@ -2,33 +2,133 @@
 
 var App = angular.module('formApp',['ui.sortable']);
 
+App.directive('groupedOptions', function() {
+    return {
+        require: 'ngModel',
+        link: function (scope, elm, attrs, ngModel) {
+            
+            scope.$watch(
+                function() {
+                    console.log(ngModel);
+                    return ngModel.$modelValue;
+                }, function(newValue, oldValue){
+                    var value = ngModel.$modelValue;
+                    if (value instanceof Array) {
+                        return;
+                    }
+                    var valueArr = value ? value.split('\n') : value;
+                    if (!valueArr) {
+                        return;
+                    }
+                    for (var i = 0; i < valueArr.length; i++) {
+                        if (valueArr[i]){
+                            valueArr[i] = {
+                                id: '',
+                                order: i,
+                                label:  valueArr[i],
+                                conditions: [],
+                            }
+                        }
+                    }
+
+                    var labels = [];
+                    angular.forEach(ngModel.$modelValue, function(label) {
+                        labels.push(label.label);
+                    });
+                    var result = labels;
+                    ngModel.$setViewValue(result);
+
+                    // function toUser(array) {                        
+                    //     return array.join("\n");
+                    // }
+
+                    // ngModel.$parsers.push(result);
+                    // ngModel.$formatters.push(toUser);
+                }, true);
+
+
+            // scope.$watch(
+            //     function() {
+            //         // var labels = [];
+            //         // angular.forEach(ngModel.$modelValue, function(label) {
+            //         //     labels.push(label.label);
+            //         // });
+            //         return ngModel.$modelValue;
+            //     }, function(newValue, oldValue){
+            //         var value = ngModel.$modelValue;
+            //         if (value instanceof Array) {
+            //             return;
+            //         }
+            //         var valueArr = value ? value.split('\n') : value;
+            //         if (!valueArr) {
+            //             return;
+            //         }
+            //         for (var i = 0; i < valueArr.length; i++) {
+            //             if (valueArr[i]){
+            //                 valueArr[i] = {
+            //                     id: '',
+            //                     order: i,
+            //                     label:  valueArr[i],
+            //                     conditions: [],
+            //                 }
+            //             }
+            //         }
+            //         var result = valueArr;
+            //         ngModel.$setViewValue(result);
+                // }, true);
+        }
+    }
+});
+
 App.controller('formCtrl', function($scope) {
     $scope.form = [
-        {id: 56, order: 56, label:'Quelles sont vos prétentions salariales ?', type:'text', numeric: true, required:false},
+        { 
+            id: 56, 
+            order: 1, 
+            label:'Quelles sont vos prétentions salariales ?', 
+            type: 'text', 
+            numeric: true, 
+            required:false
+        },
 
         {
             id: 25, 
-            order: 25, 
+            order: 2, 
             label:'Dans quelles régions êtes-vous mobile ?', 
-            type:'list', 
+            type: 'list', 
             checkbox: true, 
-            autocomplete: true, 
-            required:true,
+            autocomplete: false, 
+            required: true,
             options:[
-                {id: 6, order: 6, label:"Ile-de-France", conditions:[]},
-                {id: 9, order: 9, label:"Nord-Pas-de-Calais", conditions:[]},
-                {id: 43, order: 43, label:"Rhône-Alpes", conditions:[]},
+                {
+                    id: 6, 
+                    order: 1, 
+                    label:"Ile-de-France", 
+                    conditions: []
+                },
+                {
+                    id: 9, 
+                    order: 2, 
+                    label: "Nord-Pas-de-Calais", 
+                    conditions: []
+                },
+                {
+                    id: 43, 
+                    order: 3, 
+                    label:"Rhône-Alpes", 
+                    conditions: []
+                },
             ]
         },
 
         {
             id: 12, 
-            order: 12, 
-            label:'Dans quel département êtes-vous mobile ?', 
-            type:'list', 
+            order: 3, 
+            label: 'Dans quel département êtes-vous mobile ?', 
+            type: 'list', 
             checkbox: true, 
-            autocomplete: true, 
-            required:true, 
+            autocomplete: false, 
+            required: true, 
             conditions: [
                 {
                     id: 25,
@@ -42,37 +142,59 @@ App.controller('formCtrl', function($scope) {
             options:[
                 {
                     id: 3, 
-                    order: 3, 
+                    order: 1, 
                     label:"Nord", 
                     conditions:[
                         {
                             id: 25,
                             label: 'Dans quelles régions êtes-vous mobile ?',
                             answers:[
-                                {id: 9, label:"Nord-Pas-de-Calais"}
+                                {id: 9, label: "Nord-Pas-de-Calais"}
                             ]
                         }
                     ]
                 },
                 {
                     id: 5, 
-                    order: 5, 
+                    order: 2, 
                     label:"Pas-de-Calais", 
                     conditions:[
                         {
                             id: 25,
                             label: 'Dans quelles régions êtes-vous mobile ?',
                             answers:[
-                                {id: 9, label:"Nord-Pas-de-Calais"}
+                                {id: 9, label: "Nord-Pas-de-Calais"}
                             ]
                         }
                     ]
                 },
             ]
         },
-        // {id:3, order:3, label:'Quel est le secteur qui vous intéresse ?', type:'text', required:true, options:[]},
-        // {id:4, order:4, label:'Quand êtes-vous disponible ?', type:'date', nextmonth:true, required:true, options:[]}
+
+        {
+            id: 16, 
+            order: 4, 
+            label: 'Quand êtes-vous disponible ?', 
+            type: 'date', 
+            nextmonth: true, 
+            required: true, 
+            options: []
+        }
     ];
+
+    $scope.optionLabels = function(question_id) {
+        var optionsTextarea = [];
+        angular.forEach($scope.form, function(question) {
+            if (question_id == question.id) {
+                angular.forEach(question.options, function(option) {
+                    var new_option = { id: option.id, order: option.order, label: option.label, conditions: option.conditions };
+                    // optionsTextarea.push(option.label);
+                    optionsTextarea.push(new_option);
+                });
+            }
+        });
+        return optionsTextarea;
+    }
 
     ///////////////////////////////////
     // Get index by object attribute //
