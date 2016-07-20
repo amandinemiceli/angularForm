@@ -8,9 +8,9 @@ body {
     color: #1f2e84;
 }
 
-#applicants-form .trash-options {
+#applicants-form .delete-options {
     text-align: left;
-    line-height: 40px;
+    line-height: 42px;
 }
 
 #applicants-form .form-horizontal .form-group {

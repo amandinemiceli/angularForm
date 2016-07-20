@@ -417,4 +417,8 @@ App.controller('formCtrl', function($scope) {
     }
 
 
+    $scope.addOptionsSimulteanously = function(question_id) {
+        
+    }
+
 });

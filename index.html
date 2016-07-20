@@ -161,7 +161,7 @@
 
             <!-- Delete the current question condition -->
             <div class="col-xs-1 m-t-90 text-center">
-              <span ng-click="deleteQuestionCondition(question.id, condition_index)"><i class="fa fa-trash fa-2x trash-options" title="Supprimer cette condition"></i></span>
+              <span ng-click="deleteQuestionCondition(question.id, condition_index)"><i class="fa fa-times fa-2x delete-options" title="Supprimer cette condition"></i></span>
             </div>
 
           </div>
@@ -177,10 +177,14 @@
             <div class="" ng-init="question.options = optionLabels(question.id)">
               <h4>Valeurs possibles</h4>
 
-              <textarea rows="15" ng-model="question.options" grouped-options></textarea>
-              
               <!-- Add several options at the same time -->
-              <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajout groupé d'options" ng-click="addOptionsSimulteanously(question.id)">
+              <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajout groupé d'options" ng-click="optionstextarea = !optionstextarea">
+
+              <div ng-show="optionstextarea" class="col-xs-12">
+                <p>Veuillez saisir une option par ligne</p>
+                <textarea rows="10" cols="50" ng-model="question.options" grouped-options></textarea>
+              </div>
+              
             </div>
 
             <div class="form-group" ng-repeat="(option_index, option) in question.options">
@@ -191,7 +195,7 @@
 
               <!-- Delete the current option -->
               <div class="col-xs-1">
-                <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-trash trash-options" title="Supprimer cette option"></i></span>
+                <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-times delete-options" title="Supprimer cette option"></i></span>
               </div>
 
               <!-- Option conditions -->
@@ -214,7 +218,7 @@
 
                 <!-- Delete the current option condition -->
                 <div class="col-xs-1 m-t-90 text-center">
-                  <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-trash fa-2x trash-options" title="Supprimer cette condition"></i></span>
+                  <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-times fa-2x " title="Supprimer cette condition"></i></span>
                 </div>
 
               </div>
@@ -235,7 +239,7 @@
 
         <!-- Delete the current question -->
         <div class="col-xs-1 m-t-50 text-center">
-          <span ng-click="deleteQuestion(question.id)"><i class="fa fa-trash fa-2x trash-options" title="Supprimer cette question"></i></span>
+          <span ng-click="deleteQuestion(question.id)"><i class="fa fa-times fa-2x delete-options" title="Supprimer cette question"></i></span>
         </div>
       </div>
     
