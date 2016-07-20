@@ -43,11 +43,6 @@
     </div>
     <hr>
 
-    <!-- form input to add a new question -->
-<!--     <form class="m-t-10 m-b-10" ng-submit="addQuestion()">
-    </form> -->
-
-
     <div id="applicants-form" class="form-horizontal m-t-20" ng-model="form">
 
       <!-- Compulsory fields -->
@@ -178,16 +173,20 @@
 
           <!-- Available options -->
           <div class="form-group col-xs-12" ng-model="question.type" ng-if="question.type == 'list'">
-            <h4>Valeurs possibles</h4>
+            
+            <div class="" ng-init="question.options = optionLabels(question.id)">
+              <h4>Valeurs possibles</h4>
 
-            <h6>Ajout groupé des options</h6>
-<!-- ng-model="question.options" rows="5" ng-list="&#10;" ng-trim="false"  -->
-            <textarea rows="15" ng-model="question.options" ng-init="question.options = optionLabels(question.id)" grouped-options></textarea>
-{{ optionLabels(question.id) }}
+              <textarea rows="15" ng-model="question.options" grouped-options></textarea>
+              
+              <!-- Add several options at the same time -->
+              <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajout groupé d'options" ng-click="addOptionsSimulteanously(question.id)">
+            </div>
+
             <div class="form-group" ng-repeat="(option_index, option) in question.options">
               <!-- Option label -->
               <div class="col-xs-11">
-                <input type="text" class="form-control m-t-5" placeholder="Nom du champ" ng-model="option.label">
+                <input type="text" class="form-control m-t-5" ng-model="option.label">
               </div>
 
               <!-- Delete the current option -->
