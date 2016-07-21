@@ -5,37 +5,131 @@ var App = angular.module('formApp',['ui.sortable']);
 ///////////////////////////////////////////////////////////
 // Directive to modify the grouped options in a textarea //
 ///////////////////////////////////////////////////////////
+// App.directive('groupedOptions', function() {
+//     return {
+//         require: 'ngModel',
+//         link: function (scope, elm, attrs, ngModel) {
+
+//             scope.$watch(
+//                 function() {
+//                     return ngModel.$modelValue;
+//                 }, function(newValue, oldValue){
+
+//                     var value = ngModel.$modelValue;
+//                     if (value instanceof Array) {
+//                         return;
+//                     }
+//                     var valueArr = value ? value.split('\n') : value;
+//                     if (!valueArr) {
+//                         return;
+//                     }
+//                     for (var i = 0; i < valueArr.length; i++) {
+//                         if (valueArr[i]){
+//                             valueArr[i] = {
+//                                 id: '',
+//                                 order: i,
+//                                 label:  valueArr[i],
+//                                 conditions: [
+//                                 ],
+//                             }
+//                         }
+//                     }
+//                     var result = valueArr;
+//                     ngModel.$setViewValue(result);
+
+//                 }, true);
+
+//         }
+//     }
+// });
+
 App.directive('groupedOptions', function() {
     return {
         require: 'ngModel',
+        scope: {
+            modelValue: '=ngModel'
+        },
         link: function (scope, elm, attrs, ngModel) {
+            // existing values before formatters and parsers are used
+            var modelValues = scope.modelValue;
+
+            // format text going to user (model to view)
+            ngModel.$formatters.push(function(values) {
+                var groupedOptionsLabels = [];
+                angular.forEach(values, function(value) {
+                    groupedOptionsLabels.push(value.label);
+                });
+
+                groupedOptionsLabels = groupedOptionsLabels.join('\n');
+                
+                return groupedOptionsLabels;
+            });
+
+            // format text from the user (view to model)
+            ngModel.$parsers.push(function(values) {
+                if (values instanceof Array) {
+                    return;
+                }
+                
+                var valueArr = values ? values.split('\n') : values;
+                
+                if (!valueArr) {
+                    return;
+                }
+
+                for (var i = 0; i < valueArr.length; i++) {
+                    var existingValue = false;
+                    for (var j = 0; j < modelValues.length; j++) {
+                        if (valueArr[i] == modelValues[j].label) {
+                            existingValue = true;
+                            valueArr[i] = modelValues[j];
+                        }
+                    }                    
+                    if (existingValue == false) {
+                        valueArr[i] = {
+                            id: '',
+                            order: i+1,
+                            label:  valueArr[i],
+                            conditions: [],
+                        }
+                    }
+                }
+
+                var result = valueArr;
+                return valueArr;
+            });
 
             scope.$watch(
                 function() {
                     return ngModel.$modelValue;
                 }, function(newValue, oldValue){
+                    console.log(newValue);
 
-                    var value = ngModel.$modelValue;
-                    if (value instanceof Array) {
-                        return;
-                    }
-                    var valueArr = value ? value.split('\n') : value;
-                    if (!valueArr) {
-                        return;
-                    }
-                    for (var i = 0; i < valueArr.length; i++) {
-                        if (valueArr[i]){
-                            valueArr[i] = {
-                                id: '',
-                                order: i,
-                                label:  valueArr[i],
-                                conditions: [],
-                            }
-                        }
-                    }
-                    var result = valueArr;
-                    ngModel.$setViewValue(result);
+
+                    // var value = ngModel.$modelValue;
+                    // if (value instanceof Array) {
+                    //     return;
+                    // }
+                    // var valueArr = value ? value.split('\n') : value;
+                    // if (!valueArr) {
+                    //     return;
+                    // }
+                    // for (var i = 0; i < valueArr.length; i++) {
+                    //     if (valueArr[i]){
+                    //         valueArr[i] = {
+                    //             id: '',
+                    //             order: i,
+                    //             label:  valueArr[i],
+                    //             conditions: [
+                    //             ],
+                    //         }
+                    //     }
+                    // }
+                    // var result = valueArr;
+                    // ngModel.$setViewValue(result);
+
                 }, true);
+
         }
     }
 });
@@ -143,21 +237,21 @@ App.controller('formCtrl', function($scope) {
         }
     ];
 
-    /////////////////////////////////////////////
-    // Display grouped options in the textarea //
-    /////////////////////////////////////////////
-    $scope.optionLabels = function(question_id) {
-        var optionsTextarea = [];
+    ////////////////////////////////////////////////////
+    // Display grouped options labels in the textarea //
+    ////////////////////////////////////////////////////
+    $scope.displayGroupedOptionsLabels = function(question_id) {
+        var groupedOptionsLabels = [];
         angular.forEach($scope.form, function(question) {
             if (question_id == question.id) {
                 angular.forEach(question.options, function(option) {
-                    optionsTextarea.push(option.label);
+                    groupedOptionsLabels.push(option.label);
                 });
             }
         });
-        optionsTextarea = optionsTextarea.join('\n');
+        groupedOptionsLabels = groupedOptionsLabels.join('\n');
 
-        return optionsTextarea;
+        return groupedOptionsLabels;
     }
 
     ///////////////////////////////////
@@ -418,7 +512,7 @@ App.controller('formCtrl', function($scope) {
 
 
     $scope.addOptionsSimulteanously = function(question_id) {
-        
+
     }
 
 });

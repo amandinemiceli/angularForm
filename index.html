@@ -174,65 +174,85 @@
           <!-- Available options -->
           <div class="form-group col-xs-12" ng-model="question.type" ng-if="question.type == 'list'">
             
-            <div class="" ng-init="question.options = optionLabels(question.id)">
-              <h4>Valeurs possibles</h4>
+            <h4>Valeurs possibles</h4>
+            
+            <!-- Grouped options view -->
+<!--             <div class="" ng-init="question.options = displayGroupedOptionsLabels(question.id)">
 
-              <!-- Add several options at the same time -->
-              <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajout groupé d'options" ng-click="optionstextarea = !optionstextarea">
-
-              <div ng-show="optionstextarea" class="col-xs-12">
+              <div ng-show="groupedOptionsInTextarea" class="">
                 <p>Veuillez saisir une option par ligne</p>
-                <textarea rows="10" cols="50" ng-model="question.options" grouped-options></textarea>
+                <textarea rows="10" cols="50" data-question-id="{{ question.id }}" ng-model="question.options" grouped-options></textarea>
               </div>
+
+              <button class="btn btn-primary btn-cons m-t-10" ng-click="groupedOptionsInTextarea = !groupedOptionsInTextarea">{{ groupedOptionsInTextarea ? 'Valider' : 'Ajout groupé d\'options' }}</button>
+              
+            </div> -->
+
+            <div class="">
+
+              <div ng-show="groupedOptionsInTextarea" class="">
+                <p>Veuillez saisir une option par ligne</p>
+                <textarea rows="10" cols="50" data-question-id="{{ question.id }}" ng-model="question.options" grouped-options></textarea>
+              </div>
+
+              <button class="btn btn-primary btn-cons m-t-10" ng-click="groupedOptionsInTextarea = !groupedOptionsInTextarea">{{ groupedOptionsInTextarea ? 'Valider' : 'Ajout groupé d\'options' }}</button>
               
             </div>
 
-            <div class="form-group" ng-repeat="(option_index, option) in question.options">
-              <!-- Option label -->
-              <div class="col-xs-11">
-                <input type="text" class="form-control m-t-5" ng-model="option.label">
-              </div>
+            <!-- Separate options view -->
+            <div class="" ng-show="!groupedOptionsInTextarea">
 
-              <!-- Delete the current option -->
-              <div class="col-xs-1">
-                <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-times delete-options" title="Supprimer cette option"></i></span>
-              </div>
+              <div class="form-group" ng-repeat="(option_index, option) in question.options">
+                <!-- Option label -->
+                <div class="col-xs-11">
+                  <input type="text" class="form-control m-t-5" ng-model="option.label">
+                </div>
 
-              <!-- Option conditions -->
-              <div class="col-xs-12 p-l-50" id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}" ng-repeat="(option_condition_index, option_condition) in option.conditions">
+                <!-- Delete the current option -->
+                <div class="col-xs-1">
+                  <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-times delete-options" title="Supprimer cette option"></i></span>
+                </div>
 
-                <div class="col-xs-11 m-t-10">
-                  <div class="form-group required">
-                    <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question">Affichage de la réponse uniquement si la/les réponse(s) à la question :</label>
-                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label disable when form[question_index] == question for question in onlyListQuestions() track by question.id" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition_index, option_condition)">
-                    </select>
+                <!-- {{ question.options }} -->
+                <!-- Option conditions -->
+                <div class="col-xs-12 p-l-50" id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}" ng-repeat="(option_condition_index, option_condition) in option.conditions">
+                  
+                  <div class="col-xs-11 m-t-10">
+                    <div class="form-group required">
+                      <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question">Affichage de la réponse uniquement si la/les réponse(s) à la question :</label>
+                      <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label disable when form[question_index] == question for question in onlyListQuestions() track by question.id" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition_index, option_condition)">
+                      </select>
+<!-- ng-init="option_condition = onlyListQuestions()[-1]" -->
+                    </div>
+
+                    <div class="form-group required">
+                      <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
+                      <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[findByAttr(form, 'id', option_condition.id)].options track by option.id" ng-model="option_condition.answers" ng-change="updateOptionConditionAnswers(question.id, option_index, option_condition_index, option_condition.answers)">
+                      </select>
+                    </div>
+
                   </div>
 
-                  <div class="form-group required">
-                    <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers">Se trouve parmi les valeurs suivantes :</label>
-                    <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_answers" class="select2-container full-width required" multiple="multiple" ng-options="option.label for option in form[findByAttr(form, 'id', option_condition.id)].options track by option.id" ng-model="option_condition.answers" ng-change="updateOptionConditionAnswers(question.id, option_index, option_condition_index, option_condition.answers)">
-                    </select>
+                  <!-- Delete the current option condition -->
+                  <div class="col-xs-1 m-t-90 text-center">
+                    <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-times fa-2x " title="Supprimer cette condition"></i></span>
                   </div>
 
                 </div>
 
-                <!-- Delete the current option condition -->
-                <div class="col-xs-1 m-t-90 text-center">
-                  <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-times fa-2x " title="Supprimer cette condition"></i></span>
-                </div>
-
+                <!-- Add a new option condition -->
+                <input class="btn btn-primary btn-cons m-t-10 m-l-15" type="button" value="Ajouter une condition d'affichage" ng-click="addOptionCondition(question.id, option_index)">
               </div>
 
-              <!-- Add a new option condition -->
-              <input class="btn btn-primary btn-cons m-t-10 m-l-10" type="button" value="Ajouter une condition d'affichage" ng-click="addOptionCondition(question.id, option_index)">
+              <!-- Add a new option -->
+              <form class="form-group" ng-submit="addOption(question.id, option)">
+                <div class="col-xs-11">
+                  <input type="text" class="form-control m-t-5" ng-model="option.label" placeholder="Ajouter une option">
+                </div>
+              </form>
+
             </div>
 
-            <!-- Add a new option -->
-            <form class="form-group" ng-submit="addOption(question.id, option)">
-              <div class="col-xs-11">
-                <input type="text" class="form-control m-t-5" ng-model="option.label" placeholder="Ajouter une option">
-              </div>
-            </form>
           </div>
 
         </div>
