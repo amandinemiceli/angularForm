@@ -89,8 +89,8 @@
 
             <div class="col-xs-2">
               <div class="checkbox check-primary">
+                <input type="checkbox" id="question_{{ question.id }}_required" name="question_{{ question.id }}_required" value="required" ng-model="question.required">
                 <label for="question_{{ question.id }}_required">Champ obligatoire ?</label>
-                <input type="checkbox" id="question_{{ question.id }}_required id="question_{{ question.id }}_required" name="question_{{ question.id }}_required" value="required" ng-model="question.required">
               </div>
             </div>
           </div>
@@ -176,7 +176,7 @@
             <h4>Valeurs possibles</h4>
             
             <!-- Grouped options view -->
-            <div class="">
+            <div id="grouped-options-view" class="">
 
               <div ng-show="groupedOptionsInTextarea" class="">
                 <p>Veuillez saisir une option par ligne</p>
@@ -188,7 +188,7 @@
             </div>
 
             <!-- Separate options view -->
-            <div class="" ng-show="!groupedOptionsInTextarea">
+            <div id="separate-options-view" class="" ng-show="!groupedOptionsInTextarea">
 
               <div class="form-group" ng-repeat="(option_index, option) in question.options">
                 <!-- Option label -->
