@@ -50,7 +50,7 @@ App.directive('groupedOptions', function() {
                     if (existingValue == false) {
                         valueArr[i] = {
                             id: '',
-                            order: i+1,
+                            order: i + 1,
                             label:  valueArr[i],
                             conditions: [],
                         }
@@ -226,8 +226,8 @@ App.controller('formCtrl', function($scope) {
     $scope.addQuestion = function() {
         var id = $scope.form.length;
         $scope.form.push({
-            id: id, 
-            order: id, 
+            id: '', 
+            order: id + 1, 
             label: '', 
             type: '', 
             required: true, 
