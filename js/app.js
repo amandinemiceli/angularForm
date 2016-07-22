@@ -5,44 +5,6 @@ var App = angular.module('formApp',['ui.sortable']);
 ///////////////////////////////////////////////////////////
 // Directive to modify the grouped options in a textarea //
 ///////////////////////////////////////////////////////////
-// App.directive('groupedOptions', function() {
-//     return {
-//         require: 'ngModel',
-//         link: function (scope, elm, attrs, ngModel) {
-
-//             scope.$watch(
-//                 function() {
-//                     return ngModel.$modelValue;
-//                 }, function(newValue, oldValue){
-
-//                     var value = ngModel.$modelValue;
-//                     if (value instanceof Array) {
-//                         return;
-//                     }
-//                     var valueArr = value ? value.split('\n') : value;
-//                     if (!valueArr) {
-//                         return;
-//                     }
-//                     for (var i = 0; i < valueArr.length; i++) {
-//                         if (valueArr[i]){
-//                             valueArr[i] = {
-//                                 id: '',
-//                                 order: i,
-//                                 label:  valueArr[i],
-//                                 conditions: [
-//                                 ],
-//                             }
-//                         }
-//                     }
-//                     var result = valueArr;
-//                     ngModel.$setViewValue(result);
-
-//                 }, true);
-
-//         }
-//     }
-// });
-
 App.directive('groupedOptions', function() {
     return {
         require: 'ngModel',
@@ -99,34 +61,14 @@ App.directive('groupedOptions', function() {
                 return valueArr;
             });
 
+            // watch ng-model changes and send them back to view
             scope.$watch(
                 function() {
                     return ngModel.$modelValue;
-                }, function(newValue, oldValue){
-                    console.log(newValue);
+                }, function(newValue, oldValue) {
 
-
-                    // var value = ngModel.$modelValue;
-                    // if (value instanceof Array) {
-                    //     return;
-                    // }
-                    // var valueArr = value ? value.split('\n') : value;
-                    // if (!valueArr) {
-                    //     return;
-                    // }
-                    // for (var i = 0; i < valueArr.length; i++) {
-                    //     if (valueArr[i]){
-                    //         valueArr[i] = {
-                    //             id: '',
-                    //             order: i,
-                    //             label:  valueArr[i],
-                    //             conditions: [
-                    //             ],
-                    //         }
-                    //     }
-                    // }
-                    // var result = valueArr;
-                    // ngModel.$setViewValue(result);
+                    ngModel.$viewValue = ngModel.$formatters.reduceRight((prev, fn) => fn(prev), ngModel.$modelValue);
+                    ngModel.$render();
 
                 }, true);
 
