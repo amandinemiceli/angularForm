@@ -90,8 +90,7 @@
             <div class="col-xs-2">
               <div class="checkbox check-primary">
                 <label for="question_{{ question.id }}_required">Champ obligatoire ?</label>
-                <input type="checkbox" id="question_{{ question.id }}_required" name="question_{{ question.id }}_required" ng-model="question.required">
-                {{ question.required }}
+                <input type="checkbox" id="question_{{ question.id }}_required id="question_{{ question.id }}_required" name="question_{{ question.id }}_required" value="required" ng-model="question.required">
               </div>
             </div>
           </div>
@@ -161,7 +160,7 @@
 
             <!-- Delete the current question condition -->
             <div class="col-xs-1 m-t-90 text-center">
-              <span ng-click="deleteQuestionCondition(question.id, condition_index)"><i class="fa fa-times fa-2x delete-options" title="Supprimer cette condition"></i></span>
+              <span ng-click="deleteQuestionCondition(question.id, condition_index)"><i class="fa fa-times delete-options" title="Supprimer cette condition"></i></span>
             </div>
 
           </div>
@@ -177,17 +176,6 @@
             <h4>Valeurs possibles</h4>
             
             <!-- Grouped options view -->
-<!--             <div class="" ng-init="question.options = displayGroupedOptionsLabels(question.id)">
-
-              <div ng-show="groupedOptionsInTextarea" class="">
-                <p>Veuillez saisir une option par ligne</p>
-                <textarea rows="10" cols="50" data-question-id="{{ question.id }}" ng-model="question.options" grouped-options></textarea>
-              </div>
-
-              <button class="btn btn-primary btn-cons m-t-10" ng-click="groupedOptionsInTextarea = !groupedOptionsInTextarea">{{ groupedOptionsInTextarea ? 'Valider' : 'Ajout groupé d\'options' }}</button>
-              
-            </div> -->
-
             <div class="">
 
               <div ng-show="groupedOptionsInTextarea" class="">
@@ -213,7 +201,6 @@
                   <span ng-click="deleteOption(question.id, option_index)"><i class="fa fa-times delete-options" title="Supprimer cette option"></i></span>
                 </div>
 
-                <!-- {{ question.options }} -->
                 <!-- Option conditions -->
                 <div class="col-xs-12 p-l-50" id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}" ng-repeat="(option_condition_index, option_condition) in option.conditions">
                   
@@ -222,7 +209,6 @@
                       <label for="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question">Affichage de la réponse uniquement si la/les réponse(s) à la question :</label>
                       <select id="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" name="question_{{ question.id }}_option_{{ option_index }}_condition_{{ option_condition_index }}_question" class="select2-container full-width required" data-init-plugin="select2" ng-options="question.label disable when form[question_index] == question for question in onlyListQuestions() track by question.id" ng-model="option_condition" ng-change="updateOptionCondition(question.id, option_index, option_condition_index, option_condition)">
                       </select>
-<!-- ng-init="option_condition = onlyListQuestions()[-1]" -->
                     </div>
 
                     <div class="form-group required">
@@ -235,7 +221,7 @@
 
                   <!-- Delete the current option condition -->
                   <div class="col-xs-1 m-t-90 text-center">
-                    <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-times fa-2x " title="Supprimer cette condition"></i></span>
+                    <span ng-click="deleteOptionCondition(question.id, option_index, option_condition_index)"><i class="fa fa-times " title="Supprimer cette condition"></i></span>
                   </div>
 
                 </div>
@@ -259,7 +245,7 @@
 
         <!-- Delete the current question -->
         <div class="col-xs-1 m-t-50 text-center">
-          <span ng-click="deleteQuestion(question.id)"><i class="fa fa-times fa-2x delete-options" title="Supprimer cette question"></i></span>
+          <span ng-click="deleteQuestion(question.id)"><i class="fa fa-times delete-options" title="Supprimer cette question"></i></span>
         </div>
       </div>
     

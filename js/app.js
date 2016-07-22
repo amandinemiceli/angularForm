@@ -174,27 +174,10 @@ App.controller('formCtrl', function($scope) {
             label: 'Quand êtes-vous disponible ?', 
             type: 'date', 
             nextmonth: true, 
-            required: true, 
+            required: false, 
             options: []
         }
     ];
-
-    ////////////////////////////////////////////////////
-    // Display grouped options labels in the textarea //
-    ////////////////////////////////////////////////////
-    $scope.displayGroupedOptionsLabels = function(question_id) {
-        var groupedOptionsLabels = [];
-        angular.forEach($scope.form, function(question) {
-            if (question_id == question.id) {
-                angular.forEach(question.options, function(option) {
-                    groupedOptionsLabels.push(option.label);
-                });
-            }
-        });
-        groupedOptionsLabels = groupedOptionsLabels.join('\n');
-
-        return groupedOptionsLabels;
-    }
 
     ///////////////////////////////////
     // Get index by object attribute //
